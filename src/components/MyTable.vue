@@ -1,9 +1,10 @@
 <script setup>
 import {ref, watchEffect} from 'vue';
-import { getAllTableData } from '../services/getData';
-import { addUser } from '../services/setData';
-import {updateUser} from '../services/updateData';
-import {deleteUser} from '../services/deleteUser';
+// import { getAllTableData } from '../services/getData';
+// import { addUser } from '../services/setData';
+// import {updateUser} from '../services/updateData';
+// import {deleteUser} from '../services/deleteUser';
+import {getAllUsers, addUser, updateUser, deleteUser} from '../services/userServices';
 
 const tableData = ref([]);
 const isAddingUser = ref(false);
@@ -13,7 +14,7 @@ const updateNameRef = ref(null);
 const updateEmailRef = ref(null);
 
 const retrieveTableData = async () => {
-  tableData.value = await getAllTableData();
+  tableData.value = await getAllUsers();
   tableData.value.forEach(record => {
     record.isBeingModified = false;
   });
