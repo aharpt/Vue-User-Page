@@ -1,9 +1,5 @@
 <script setup>
 import {ref, watchEffect} from 'vue';
-// import { getAllTableData } from '../services/getData';
-// import { addUser } from '../services/setData';
-// import {updateUser} from '../services/updateData';
-// import {deleteUser} from '../services/deleteUser';
 import {getAllUsers, addUser, updateUser, deleteUser} from '../services/userServices';
 
 const tableData = ref([]);
