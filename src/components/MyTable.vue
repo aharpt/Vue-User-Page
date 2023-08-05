@@ -8,9 +8,15 @@ const name = ref('');
 const email = ref('');
 const updateNameRef = ref(null);
 const updateEmailRef = ref(null);
+const error = ref('');
 
 const retrieveTableData = async () => {
   tableData.value = await getAllUsers();
+  if (typeof tableData.value === 'string') {
+    error.value = tableData.value;
+    tableData.value = [];
+  }
+
   tableData.value.forEach(record => {
     record.isBeingModified = false;
   });
@@ -23,7 +29,7 @@ watchEffect(async () => {
 // Add Users
 const toggleAdd = async () => {
   if (isAddingUser.value) {
-    await addUser(name.value, email.value);
+    await addUser(name.value, email.value).catch(err => {error.value = err});
     await retrieveTableData();
   }
   isAddingUser.value = !isAddingUser.value;
@@ -46,19 +52,20 @@ const updateRecord = async (index, id) => {
 
   // If isBeingModified is now false, 'Submit' button was clicked
   if (!tableData.value[index].isBeingModified) {
-    await updateUser(id, updateNameRef.value[getCurrentIndex(index)].value, updateEmailRef.value[getCurrentIndex(index)].value);
+    await updateUser(id, updateNameRef.value[getCurrentIndex(index)].value, updateEmailRef.value[getCurrentIndex(index)].value).catch(err => error.value = err);
     await retrieveTableData();
   }
 }
 
 const deleteRecord = async (id) => {
-    await deleteUser(id);
+    await deleteUser(id).catch(err => error.value = err);
     await retrieveTableData();
 }
 
 </script>
 
 <template>
+  <p style="color: red;" v-if="error">{{error}}</p>
 <table>
   <tr>
     <td class="id">#</td>
